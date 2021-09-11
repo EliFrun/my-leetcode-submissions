@@ -6,31 +6,15 @@
 #         self.right = right
 class Solution:
     def findTarget(self, root: Optional[TreeNode], k: int) -> bool:
-        for i in self.toList(root):
-            if k - i == i:
-                continue
-            if self.inTree(root, k - i):
+        s = self.inorder(root)
+        for v in s:
+            if k - v in s.difference(set([v])):
                 return True
-            
         return False
         
-        
-    def toList(self, root):
+    def inorder(self, root):
         if not root:
-            return []
+            return set()
         
-        return self.toList(root.left) + [root.val] + self.toList(root.right)
+        return self.inorder(root.left).union(set([root.val])).union(self.inorder(root.right))
         
-        
-    def inTree(self, root, k):
-        if not root:
-            return False
-        
-        if root.val == k:
-            return True
-        
-        if root.val < k:
-            return self.inTree(root.right, k)
-        
-        if root.val > k:
-            return self.inTree(root.left, k)
