@@ -52,16 +52,6 @@ class Solution:
                 s = s[i:]
 
 
-        
-        print(
-            decimal_sign,
-            decimal,
-            decimal_point,
-            decimal_2,
-            exponent_exists,
-            exponent_sign,
-            exponent
-        )
         if s:
             return False
                 
