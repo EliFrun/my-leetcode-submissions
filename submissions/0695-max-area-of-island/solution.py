@@ -23,6 +23,5 @@ class Solution:
                 if v == 1 and (i,j) not in visited:
                     ret = max(ret, dfs((i, j), visited))
  
-                
         return ret
         
