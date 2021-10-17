@@ -29,8 +29,6 @@ class Solution:
             if len(lis) < k:
                 break
             
-            print([x.val for x in lis])
-            
             poo = ListNode()
             curr_rev = poo
             for n in reversed(lis):
