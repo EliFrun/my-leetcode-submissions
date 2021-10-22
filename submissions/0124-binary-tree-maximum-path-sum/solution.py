@@ -6,19 +6,19 @@
 #         self.right = right
 class Solution:
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
-        max_path = [-1000000000]
-        
-        def dfs(node, a):
+        ret = -1_000_000_000
+        def dfs(node):
             if not node:
                 return 0
-            # since any path, we can exclude a path if its below 0
-            left = max(dfs(node.left, a), 0)
-            right = max(dfs(node.right, a), 0)
-            a[0] = max(a[0], left + right + node.val)
+            nonlocal ret
+            left = max(0, dfs(node.left))
+            right = max(0, dfs(node.right))
+            ret = max(ret, left + right + node.val)
+            
             return max(left + node.val, right + node.val)
         
-        dfs(root, max_path)
-        return max_path[0]
+        dfs(root)
+        return ret
     
         
         
