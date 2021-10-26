@@ -1,37 +1,31 @@
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        cache = ['not_visited'] * numCourses
-        deps = [[] for _ in range(numCourses)]
-        
-        for p in prerequisites:
-            deps[p[0]].append(p[1])
+        courses = [[] for _ in range(numCourses)]
+        for course, prereq in prerequisites:
+            courses[course].append(prereq)
+            
+        cache = ['not_visited' for _ in range(numCourses)]
+            
             
         def dfs(course):
+            nonlocal courses
             nonlocal cache
-            nonlocal deps
-            if cache[course] == 'safe':
-                return True
+            
             if cache[course] == 'visited':
                 return False
-            if not deps[course]:
-                cache[course] = 'safe'
+            if not courses[course]:
+                return True
+            if cache[course] == 'safe':
                 return True
             
             cache[course] = 'visited'
-            for dep in deps[course]:
-                if not dfs(dep):
+            for prereq in courses[course]:
+                if not dfs(prereq):
                     return False
-                
+            
             cache[course] = 'safe'
-                
+            
             return True
         
-        print(deps)
-        print(cache)
-        for i in range(numCourses):
-            if not dfs(i):
-                return False
-            
-        return True
-        
+        return all([dfs(course) for course in range(numCourses)])
         
