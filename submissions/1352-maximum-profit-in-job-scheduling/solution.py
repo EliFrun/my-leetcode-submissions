@@ -1,31 +1,30 @@
 class Solution:
     def jobScheduling(self, startTime: List[int], endTime: List[int], profit: List[int]) -> int:
-        jobs = sorted(zip(startTime, endTime, profit), key=lambda x: x[0])
-        cache = [-1] * len(startTime)
-        
-        def findBestAfterEnd(end, idx):
+        jobs = sorted(zip(startTime, endTime, profit))
+        cache = [-1 for _ in range(len(jobs))]
+    
+        def nextJob(idx, endtime):
             nonlocal jobs
             for i in range(idx, len(jobs)):
-                if jobs[i][0] >= end:
+                if jobs[i][0] >= endtime:
                     return i
                 
             return len(jobs)
         
-        def findOptimal(idx):
+        def bestSchedule(idx):
             nonlocal jobs
             nonlocal cache
             if idx >= len(jobs):
                 return 0
-            if cache[idx] > 0:
+            if cache[idx] >= 0:
                 return cache[idx]
             
-            including_curr = jobs[idx][2] + findOptimal(findBestAfterEnd(jobs[idx][1], idx))
-            without_curr = findOptimal(idx + 1)
-            
-            cache[idx] = max(including_curr, without_curr)
+            with_curr = jobs[idx][2] + bestSchedule(nextJob(idx, jobs[idx][1]))
+            without_curr = bestSchedule(idx + 1)
+            cache[idx] = max(with_curr, without_curr)
             return cache[idx]
         
-        return findOptimal(0)
+        return bestSchedule(0)
             
             
             
