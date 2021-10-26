@@ -1,27 +1,27 @@
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
-        def dfs(curr, visited):
-            if curr in visited:
+        visited = set()
+        def dfs(i, j):
+            nonlocal visited
+            if (i, j) in visited:
                 return 0
-            i, j = curr
+            if grid[i][j] != 1:
+                return 0
+            
+            visited.add((i, j))
+            directions = [(-1, 0), (0, -1), (1, 0), (0, 1)]
             ret = 1
-            visited.add(curr)
-            if i - 1 >= 0 and grid[i - 1][j] == 1:
-                ret += dfs((i - 1, j), visited)
-            if j - 1 >= 0 and grid[i][j - 1] == 1:
-                ret += dfs((i, j - 1), visited)
-            if i + 1 < len(grid) and grid[i + 1][j] == 1:
-                ret += dfs((i + 1, j), visited)
-            if j + 1 < len(grid[0]) and grid[i][j + 1] == 1:
-                ret += dfs((i, j + 1), visited)
+            for di, dj in directions:
+                if 0 <= i + di < len(grid) and 0 <= j + dj < len(grid[0]):
+                    ret += dfs(i + di, j + dj)
+                    
             return ret
         
-        visited = set()
-        ret = 0
-        for i, row in enumerate(grid):
-            for j, v in enumerate(row):
-                if v == 1 and (i,j) not in visited:
-                    ret = max(ret, dfs((i, j), visited))
- 
-        return ret
         
+        best_area = 0
+        for i, row in enumerate(grid):
+            for j, val in enumerate(row):
+                if val == 1:
+                    best_area = max(best_area, dfs(i, j))
+                    
+        return best_area
