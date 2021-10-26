@@ -1,21 +1,22 @@
 class Solution:
     def maxPerformance(self, n: int, speed: List[int], efficiency: List[int], k: int) -> int:
-        mix = sorted(zip(speed, efficiency), key=lambda x: -x[1])
+        employees = sorted(zip(speed, efficiency), key=lambda x: -x[1])
         
-        ret = 0
         q = []
+        best = 0
         curr_sum = 0
-        for s, e in mix:
+        for s, e in employees:
             if len(q) < k:
                 curr_sum += s
                 heappush(q, s)
             else:
                 if s > q[0]:
-                    curr_sum += s - heappushpop(q, s)    
+                    curr_sum = curr_sum - heappushpop(q, s) + s
+                    
+            best = max(best, curr_sum * e)
                 
-            ret = max(ret, curr_sum * e)
-                
-        return ret % 1_000_000_007
-                
+        return best % 1_000_000_007
+                       
+                        
             
         
