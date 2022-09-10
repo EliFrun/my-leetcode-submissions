@@ -9,26 +9,25 @@ class Node:
 """
 
 class Solution:
-    def flatten(self, head: 'Node') -> 'Node':
+    def flatten(self, head: 'Optional[Node]') -> 'Optional[Node]':
         if not head:
             return head
-        nodes = []
+        lis = []
         def navigate(node):
+            nonlocal lis
             if not node:
-                return []    
-            ret = [node] + navigate(node.child) + navigate(node.next)
-            return ret
+                return
+            
+            lis.append(node)
+            navigate(node.child)
+            navigate(node.next)
         
-    
-        nodes = navigate(head)
-
-        for i, node in enumerate(nodes):
-            if i < len(nodes) - 1:
-                nodes[i + 1].prev = node
-                node.next = nodes[i + 1]
-
-            node.child = None
-
-
-        return nodes[0]
+        navigate(head)
+        for i in range(len(lis) - 1):
+            lis[i].next = lis[i+1]
+            lis[i+1].prev = lis[i]
+            lis[i].child = None
+            
+        lis[-1].child = None
+        return head
         
