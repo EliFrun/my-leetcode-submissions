@@ -19,4 +19,3 @@ class Solution:
                 best_end = current_end + 1  # the +1 is to make 'best_end' exclusive
 
         return best_sum
-        
