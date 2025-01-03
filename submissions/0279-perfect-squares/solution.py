@@ -1,23 +1,21 @@
 class Solution:
-    def numSquares(self, n: int) -> int:
-        if n < 4:
-            return n
-        checking = set([n])
-        to_check = set()
+    def numSquares(self, m: int) -> int:
+        cache = [10 ** 5 for _ in range(m + 1)]
+        def solve(n):
+            if int(sqrt(n)) * int(sqrt(n)) == n:
+                cache[n] = 1
+                return cache[n]
+            if cache[n] != 10 ** 5:
+                return cache[n]
+            
+            if n <= 3:
+                cache[n] = n
+                return cache[n]
+            
+            cache[n] = min([ 1 + solve(n - i * i) for i in range(int(sqrt(n)), 0, -1) ])
+            return cache[n]
+
+
+        return solve(m)
+
         
-        layer = 0
-        while checking:
-            layer += 1
-            for i in checking:
-                largest_square = int(sqrt(i))
-                for j in range(largest_square, 0, -1):
-                    foo = i - j * j
-                    if foo == 0:
-                        return layer
-                    to_check.add(foo)
-                    
-            checking = to_check
-            to_check = set()
-            
-            
-                
