@@ -1,16 +1,27 @@
 class Solution:
     def maxPoints(self, points: List[List[int]]) -> int:
-        ret = 0
-        slopes = defaultdict(lambda: set())
-        for i, a in enumerate(points):
-            for j , b in enumerate(points[i + 1:]):
-                m = (b[1] - a[1]) / (b[0] - a[0]) if b[0] - a[0] != 0 else float('inf')
-                y_int = b[1] - m * b[0] if b[0] - a[0] != 0 else b[0]
-                slopes[m, y_int].add(tuple(a))
-                slopes[m, y_int].add(tuple(b))
-
+        if len(points) <= 1:
+            return 1
+        eq_map = defaultdict(set)
+        for i in range(len(points)):
+            for j in range(i + 1, len(points)):
+                a,b = points[i]
+                c,d = points[j]
+                x_fact = b - d
+                y_fact = a - c
+                n = (c - d) * a + (b - a) * c
+                if x_fact == 0:
+                    eq_map[(0, -1, b)].add((a,b))
+                    eq_map[(0, -1, b)].add((c,d))
+                    continue
+                if y_fact == 0:
+                    eq_map[(1, 0, a)].add((a,b))
+                    eq_map[(1, 0, a)].add((c,d))
+                    continue
+                n = n / x_fact
+                y_fact = y_fact / x_fact
+                eq_map[(1, y_fact, n)].add((a,b))
+                eq_map[(1, y_fact, n)].add((c,d))
         
-        return max(len(x) for x in list(slopes.values())) if slopes else len(points)
-                    
-        
-        
+        #print([(x,list(y)) for x,y in eq_map.items()])
+        return max([len(y) for _,y in eq_map.items()])
