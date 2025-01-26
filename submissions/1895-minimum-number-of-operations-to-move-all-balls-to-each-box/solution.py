@@ -1,16 +1,18 @@
 class Solution:
     def minOperations(self, boxes: str) -> List[int]:
-        s = set()
-        
-        for i, v in enumerate(boxes):
-            if v == "1":
-                s.add(i)
-                
-        ret = [0] * len(boxes)
-        
-        for i in s:
-            for j in range(len(ret)):
-                ret[j] += abs(j - i)
-                
+        balls_left = 0
+        balls_right = boxes.count('1')
+        left_sum = 0
+        right_sum = sum([i for i,v in enumerate(boxes) if v == '1'])
+        ret = []
+        for c in boxes:
+            balls_right -= 1 if c == '1' else 0
+            ret.append(right_sum + left_sum)
+            balls_left += 1 if c == '1' else 0
+            left_sum += balls_left
+            right_sum -= balls_right
+
         return ret
+
+
         
