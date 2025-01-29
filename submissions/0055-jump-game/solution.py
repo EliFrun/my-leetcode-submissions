@@ -1,19 +1,19 @@
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
-        if len(nums) == 1:
-            return True
-        if  nums[0] == 0:
-            return False
-        if nums[0] >= len(nums) - 1:
-            return True
+        @functools.cache
+        def solve(n):
+            if n == len(nums) - 1:
+                return True
+            if  nums[n] == 0:
+                return False
+            if n + nums[n] >= len(nums) - 1:
+                return True
 
-        maximum_reachable_distance = nums[0]
-        index = 0
-        for i in range(0, nums[0] + 1):
-            if nums[i] + i >= maximum_reachable_distance:
-                maximum_reachable_distance = nums[i] + i
-                index = i
-        
-        if nums[index] == 0:
+            for i in range(nums[n], 0, -1):
+                if solve(n + i):
+                    return True
+
             return False
-        return self.canJump(nums[index:])
+               
+        return solve(0)
+        
