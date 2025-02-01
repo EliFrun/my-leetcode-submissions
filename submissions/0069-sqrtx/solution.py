@@ -1,18 +1,14 @@
 class Solution:
     def mySqrt(self, x: int) -> int:
-        if x == 0:
-            return 0
-        lower, upper = 1,1
-        
-        while upper * upper < x:
-            upper *= 2
-            
-            
-        while upper - lower > 1:
-            mid = (lower + upper) // 2
-            if mid * mid < x:
-                lower = mid
-            else:
-                upper = mid
-                
-        return lower if upper * upper > x else upper
+        if x <= 1:
+            return x
+        curr, prev = 0.5 * (x + 1), x
+        steps = 0
+        while abs(prev - curr) > 0.1:
+            steps += 1
+            nxt = 0.5 * (curr + x/curr)
+            prev = curr
+            curr = nxt
+
+        return int(curr)
+
