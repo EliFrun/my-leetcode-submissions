@@ -1,16 +1,19 @@
 class Solution:
     def areAlmostEqual(self, s1: str, s2: str) -> bool:
-        diffs = 0
-        a1, a2, b1, b2 = "", "", "", ""
-        for i, j in zip(s1, s2):
-            if i != j:
-                if diffs == 0:
-                    a1, a2 = i, j
-                elif diffs == 1:
-                    b1, b2 = i, j
-                else:
+        if len(s1) != len(s2):
+            return False
+
+        out_of_place = []
+        for i, c in enumerate(s1):
+            if s2[i] != c:
+                out_of_place.append((c, s2[i]))
+                if len(out_of_place) > 2:
                     return False
-                diffs += 1
-                
-        return a1 == b2 and a2 == b1
+
+        if len(out_of_place) == 0:
+            return True
+        if len(out_of_place) == 1:
+            return False
+
+        return out_of_place[0][0] == out_of_place[1][1] and out_of_place[0][1] == out_of_place[1][0]
         
