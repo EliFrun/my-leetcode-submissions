@@ -7,7 +7,7 @@ class Solution:
             j, k = i + 1, len(nums) - 1
             while(j < k):
                 if closest == target: 
-                    break
+                    return target
                     
                 value = nums[i] + nums[j] + nums[k]
                 if value > target:
