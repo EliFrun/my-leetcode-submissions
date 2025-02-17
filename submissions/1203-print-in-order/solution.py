@@ -1,24 +1,25 @@
 class Foo:
     def __init__(self):
-        self.curr = 1
+        self.state = 0
 
 
-    def first(self, printFirst: 'Callable[[], None]') -> None:
+    def first(self, printFirst: 'Callable[[], None]') -> None:  
         # printFirst() outputs "first". Do not change or remove this line.
         printFirst()
-        self.curr = 2
+        self.state = 1
 
 
     def second(self, printSecond: 'Callable[[], None]') -> None:
-        while self.curr < 2:
-            continue
+        while self.state < 1:
+            time.sleep(0.001)
         # printSecond() outputs "second". Do not change or remove this line.
         printSecond()
-        self.curr = 3
+        self.state = 2
 
 
     def third(self, printThird: 'Callable[[], None]') -> None:
-        while self.curr < 3:
-            continue
         # printThird() outputs "third". Do not change or remove this line.
+        while self.state < 2:
+            time.sleep(0.001)
         printThird()
+
