@@ -2,15 +2,20 @@ class Solution:
     def countPrimes(self, n: int) -> int:
         if n < 3:
             return 0
-        nums = [1 for _ in range(2, n)]
-        for j in range(2, len(nums), 2):
-            nums[j] = 0
-        for i in range(1, int(sqrt(n)), 2):
-            if nums[i] == 0:
-                continue
-            curr = i + 2
-            for j in range(i + i + 2, len(nums), i + 2):
-                nums[j] = 0
-
-        return sum(nums)
+        nums = list(range(2, n))
+        ret = 0
+        curr = nums[0]
+        while curr < sqrt(n):
+            ret += 1
+            for i in range(curr + curr, n, curr):
+                nums[i - 2] = 0
+            found = False
+            for i in range(curr + (1 if curr & 1 == 0 else 2), int(sqrt(n)) + 1, 2):
+                if nums[i - 2] > 1:
+                    found = True
+                    curr = nums[i - 2]
+                    break
+            if not found:
+                break
+        return sum([1 if num > 0 else 0 for num in nums])
         
