@@ -7,4 +7,3 @@ class Solution:
             arr2 ^= v
 
         return arr1 == 0 or arr2 == 1
-        
