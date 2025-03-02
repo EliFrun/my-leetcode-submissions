@@ -37,5 +37,3 @@ class Solution:
             layer += 1
 
         return 0
-
-                    
