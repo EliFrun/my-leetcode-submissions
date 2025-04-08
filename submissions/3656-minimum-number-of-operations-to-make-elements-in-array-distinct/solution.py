@@ -1,19 +1,21 @@
 class Solution:
     def minimumOperations(self, nums: List[int]) -> int:
-        c = Counter(nums)
-        g = set([k for k,v in c.items() if v >= 2])
-        ret = 0
+        l = [0] * max(nums)
+        for num in nums:
+            l[num - 1] += 1
+        
         i = 0
-        while g:
-            lis = nums[i:i + 3]
-            for n in lis:
-                c[n] -= 1
-                if c[n] < 2 and n in g:
-                    g.remove(n)
-            i += 3
+        ret = 0
+        while max(l) > 1:
             ret += 1
+            if i + 3 >= len(nums):
+                return ret
+            for j in range(3):
+                l[nums[i + j] - 1] -= 1 
+            i += 3
 
         return ret
+
 
         
         
