@@ -3,15 +3,12 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        x = []
+        for i in range(len(nums) - 1, -1, -1):
+            if nums[i] != 0:
+                continue
+            j = i
+            while j + 1 < len(nums) and nums[j + 1] != 0:
+                nums[j + 1], nums[j] = nums[j], nums[j + 1]
+                j += 1
         
-        count = 0
         
-        for i in nums:
-            if i == 0:
-                count += 1
-            else:
-                x.append(i)
-                
-        for i, val in enumerate(x + [0] * count):
-            nums[i] = val
