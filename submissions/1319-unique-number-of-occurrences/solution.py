@@ -1,8 +1,5 @@
 class Solution:
     def uniqueOccurrences(self, arr: List[int]) -> bool:
-        d = defaultdict(int)
+        return all(x < 2 for x in Counter(Counter(arr).values()).values())
         
-        for i in arr:
-            d[i] += 1
-            
-        return len(set(d.values())) == len(list(d.values()))
+        
