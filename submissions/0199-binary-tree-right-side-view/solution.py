@@ -22,4 +22,3 @@ class Solution:
             foo = []
             
         return ret
-        
