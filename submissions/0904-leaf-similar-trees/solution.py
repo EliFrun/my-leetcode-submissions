@@ -15,4 +15,3 @@ class Solution:
             return leafseq(root.left) + leafseq(root.right)
         
         return leafseq(root1) == leafseq(root2)
-        
