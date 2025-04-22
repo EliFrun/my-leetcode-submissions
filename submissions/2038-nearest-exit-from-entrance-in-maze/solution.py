@@ -1,32 +1,37 @@
 class Solution:
     def nearestExit(self, maze: List[List[str]], entrance: List[int]) -> int:
-        # bfs
-        visited = set()
-        curr_layer = [entrance]
-        next_layer = []
-        
-        can_leave = False
-        ret = 0
-        
-        while len(curr_layer) > 0:
-            for x,y in curr_layer:
-                if (x,y) in visited:
-                    continue
+        curr = set()
+        dirs = [0,1,0,-1,0]
+        for i in range(4):
+            dx = dirs[i]
+            dy = dirs[i + 1]
+            if entrance[0] + dx < 0 or entrance[0] + dx > len(maze) - 1:
+                continue
+            if entrance[1] + dy < 0 or entrance[1] + dy > len(maze[0]) - 1:
+                continue
+            if maze[entrance[0] + dx][entrance[1] + dy] == '+':
+                continue
+            curr.add((entrance[0] + dx, entrance[1] + dy))
+        visited = set([tuple(entrance)])
+        layer = 0
+        while curr:
+            layer += 1
+            nxt = set()
+            for x,y in curr:
                 visited.add((x,y))
-                for dx, dy in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
-                    if can_leave:
-                        if (x + dx < 0 or x + dx > len(maze) - 1 or y + dy < 0 or y + dy > (len(maze[0]) - 1)):
-                            return ret
-                    if ((x + dx, y + dy) not in visited and
-                        (x + dx >= 0 and x + dx < len(maze) and y + dy >= 0 and y + dy < (len(maze[0]))) and
-                        (maze[x + dx][y + dy] != '+')
-                       ):
-                        next_layer.append((x+dx, y + dy))
-                
-                                      
-            curr_layer = next_layer
-            next_layer = []
-            can_leave = True
-            ret += 1
-                                      
+                dirs = [0,1,0,-1,0]
+                for i in range(4):
+                    dx = dirs[i]
+                    dy = dirs[i + 1]
+                    if x + dx < 0 or x + dx > len(maze) - 1:
+                        return layer
+                    if y + dy < 0 or y + dy > len(maze[0]) - 1:
+                        return layer
+                    if maze[x + dx][y + dy] != "+":
+                        nxt.add((x + dx, y + dy))
+            curr = nxt - visited
+
         return -1
+
+    
+        
