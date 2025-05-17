@@ -3,21 +3,14 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        zero, one, two = 0, 0, 0
-        for i in nums:
-            if i == 0:
-                zero += 1
-            if i == 1:
-                one += 1
-            if i == 2:
-                two += 2
-                
-        index = 0    
-        for i in range(zero):
-            nums[i] = 0
+        c = Counter(nums)
+        l = 0
+        for i in range(3):
+            for j in range(l, l + c[i]):
+                nums[j] = i
+            l = l + c[i]
+
+        
             
-        for i in range(zero, zero + one):
-            nums[i] = 1
             
-        for i in range(zero + one, len(nums)):
-            nums[i] = 2
+        
