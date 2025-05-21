@@ -3,25 +3,38 @@ class Solution:
         """
         Do not return anything, modify matrix in-place instead.
         """
-        
-        zero_rows = set()
-        zero_columns = set()
-        
-        for i in enumerate(matrix):
-            for j in enumerate(i[1]):
-                if j[1] == 0:
-                    zero_columns.add(j[0])
-                    zero_rows.add(i[0])
-                    
-                    
-                    
-        for row in zero_rows:
-            for i in range(len(matrix[0])):
-                matrix[row][i] = 0
-                
-        for column in zero_columns:
-            for i in range(len(matrix)):
-                matrix[i][column] = 0
-                
+        row, column = False, False
+        for i in range(len(matrix)):
+            for j in range(len(matrix[0])):
+                if i == 0:
+                    if matrix[i][j] == 0:
+                        row = True
+                if j == 0:
+                    if matrix[i][j] == 0:
+                        column = True
+                if matrix[i][j] == 0:
+                    matrix[i][0] = 0
+                    matrix[0][j] = 0
 
-                    
+        print(*matrix, sep="\n")
+                
+        for i in range(len(matrix) - 1, 0, -1):
+            if matrix[i][0] == 0:
+                for j in range(1, len(matrix[0])):
+                    matrix[i][j] = 0
+        
+        for j in range(len(matrix[0]) - 1, 0, -1):
+            if matrix[0][j] == 0:
+                for i in range(1, len(matrix)):
+                    matrix[i][j] = 0
+
+        if column:
+            for i in range(len(matrix)):
+                matrix[i][0] = 0
+        if row:
+            for j in range(len(matrix[0])):
+                matrix[0][j] = 0
+
+        
+                
+        
