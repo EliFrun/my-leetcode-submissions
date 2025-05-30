@@ -10,7 +10,6 @@ class Solution:
                 left = right
             right += 1
 
-        print(d)
         ret = -1
         for l in d.values():
             for i in range(len(l)):
