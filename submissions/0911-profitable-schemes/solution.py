@@ -1,10 +1,11 @@
 class Solution:
     def profitableSchemes(self, n: int, minProfit: int, group: List[int], profit: List[int]) -> int:
-        dp = [[0] * (minProfit + 1) for _ in range(n + 1)]
-        dp[0][0] = 1
-        for g, p in zip(group, profit):
-            for i in range(n - g, -1, -1):
-                for j in range(minProfit, -1, -1):
-                    dp[i + g][min(minProfit, j + p)] += dp[i][j]
+        @cache
+        def solve(left, pp, i):
+            if left < 0:
+                return 0
+            if i >= len(group):
+                return 1 if pp == 0 else 0
+            return (solve(left - group[i], max(0, pp - profit[i]), i + 1) + solve(left, pp, i + 1)) % 1_000_000_007
 
-        return sum(dp[i][-1] for i in range(len(dp))) % 1_000_000_007
+        return solve(n, minProfit, 0)
