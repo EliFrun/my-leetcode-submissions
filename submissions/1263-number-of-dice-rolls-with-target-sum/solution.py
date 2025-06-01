@@ -1,20 +1,19 @@
 class Solution:
     def numRollsToTarget(self, n: int, k: int, target: int) -> int:
-        @cache
-        def solve(nn, tt):
-            if tt < 0:
-                return 0
-            if nn > tt:
-                return 0
-            if nn == 1:
-                return 1 if tt <= k else 0
-            if nn == tt:
-                return 1
+        dp = [[0] * (target + 1) for _ in range(n)]
 
-            ret = 0
-            for i in range(1, k + 1):
-                ret += solve(nn - 1, tt - i)
-            return ret
+        for j in range(1, k + 1):
+            if j > target:
+                break
+            dp[0][j] = 1
+        for i in range(1, len(dp)):
+            for j in range(1, len(dp[0])):
+                for l in range(1, k + 1):
+                    if j + l > target:
+                        break
+                    dp[i][j + l] = (dp[i][j + l] + dp[i - 1][j]) % 1_000_000_007
 
-        return solve(n, target) % 1_000_000_007
+
+        return dp[-1][target]
+
         
