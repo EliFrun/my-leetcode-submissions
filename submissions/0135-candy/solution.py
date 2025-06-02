@@ -1,31 +1,29 @@
 class Solution:
     def candy(self, ratings: List[int]) -> int:
         ret = 1
-        curr = 1
-        chain = 1
-        prev_val = 0
-        print(f'curr: {curr}')
-        for i in range(1, len(ratings)):
-            if ratings[i] > ratings[i - 1]:
-                chain = 0
-                curr += 1
-                prev_val = curr
-            elif ratings[i] == ratings[i - 1]:
-                chain = 0
-                curr = 1
-                prev_val = curr
+        dec, inc = 1, 1
+        prev = 0
+        for i in range(len(ratings) - 1):
+            if ratings[i] < ratings[i + 1]:
+                dec = 1
+                inc += 1
+                prev = inc
+                ret += inc
+            elif ratings[i] > ratings[i + 1]:
+                inc = 1
+                if dec >= prev:
+                    ret += 1
+                ret += dec
+                dec += 1
             else:
-                if chain == prev_val - 1:
-                    chain += 1
-                curr = 1
-                ret += chain
-                chain += 1
-                print(f'chain: {chain}')
-            ret += curr
-            print(f'curr: {curr}')
-
+                ret += 1
+                prev = 1
+                dec = 1
+                inc = 1
 
         return ret
+
+            
 
         
 
