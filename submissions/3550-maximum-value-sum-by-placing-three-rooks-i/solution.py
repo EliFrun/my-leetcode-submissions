@@ -1,8 +1,24 @@
 class Solution:
     def maximumValueSum(self, board: List[List[int]]) -> int:
+        board = [sorted(list(enumerate(board[i])), key=lambda x: x[1])[-3:][::-1] for i in range(len(board))]
+
+        s = defaultdict(SortedList)
+        for row in board:
+            for i,v in row:
+                s[i].add(v)
+
+        for row in board:
+            for i in range(len(row) - 1, -1, -1):
+                j, v = row[i]
+                if len(s[j]) >= 3 and s[j][-3] > v:
+                    row.pop(i)
+        
+
+        board = [x for x in board if x]
+
         row_bests = []
         for i, row in enumerate(board):
-            row_bests.extend(sorted([(v,(i,j)) for j,v in enumerate(row)])[-3:])
+            row_bests.extend(sorted([(v,(i,j)) for j,v in row])[-3:])
 
         @cache
         def solve(i_taken, j_taken):
