@@ -1,35 +1,16 @@
 class Solution:
     def trap(self, height: List[int]) -> int:
-        if not height or len(height) <= 2:
-            return 0
-
-        current, lookforward = 0, 1
+        l, r = 0, len(height) - 1
         ret = 0
-        
-        while current < len(height):
-            if height[current] == 0:
-                current += 1
-                lookforward = current + 1
-                continue
-                
-            second_highest = 0
-            second_highest_index = current + 1
-            while lookforward < len(height) and height[lookforward] < height[current]:
-                if height[lookforward] >= second_highest:
-                    second_highest = height[lookforward] 
-                    second_highest_index = lookforward
-                lookforward += 1
-                
-            if lookforward >= len(height):
-                lookforward = second_highest_index
-                current_height = second_highest
+        while l < r:
+            if height[l] <= height[r]:
+                ret += max(0, height[l] - height[l + 1])
+                height[l + 1] = max(height[l], height[l + 1])
+                l += 1
             else:
-                 current_height = height[current]
+                ret += max(0, height[r] - height[r - 1])
+                height[r - 1] = max(height[r], height[r - 1])
+                r -= 1
 
-            while current < lookforward:
-                    ret += max(0, current_height - height[current])
-                    current += 1
-
-            lookforward = current + 1
-                
         return ret
+
