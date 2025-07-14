@@ -1,43 +1,27 @@
 class Solution:
     def recoverArray(self, n: int, sums: List[int]) -> List[int]:
-        def solve(t, s, m):
-            if m == 1:
-                return [t]
-            
-            if (diff := s[-1] - s[-2]) in s:
-                lis = s.copy()
-                with_num = SortedList()
-                without_num = SortedList()
-                while lis:
-                    if lis[-1] - diff in s:
-                        with_num.add(lis[-1])
-                        without_num.add(lis[-1] - diff)
-                        lis.remove(lis[-1] - diff)
-                        lis.remove(lis[-1])
-                    else:
-                        break
-                if not lis:
-                    if res := solve(t - diff, without_num, m - 1):
-                        return [diff] + res
-            if (diff := s[-2] - s[-1]) in s:
-                lis = s.copy()
-                with_num = SortedList()
-                without_num = SortedList()
-                while lis:
-                    if lis[0] - diff in s:
-                        with_num.add(lis[0])
-                        without_num.add(lis[0] - diff)
-                        lis.remove(lis[0] - diff)
-                        lis.remove(lis[0])
-                    else:
-                        break
-                if not lis:
-                    if res := solve(t - diff, without_num, m - 1):
-                        return [diff] + res
+        def solve(left, lis):
+            if left == 1:
+                return [lis[1] if lis[1] != 0 else lis[0]]
+            diff = lis[-1] - lis[-2]
+            l1, l2 = SortedList(), SortedList()
+            while lis:
+                v1, v2 = lis[-1], lis[-1] - diff
+                l1.add(v1)
+                lis.remove(v1)
+                if v2 in lis:
+                    l2.add(v2)
+                    lis.remove(v2)
+                else:
+                    return []
 
+
+            if diff in l1 and 0 in l2 and (x := solve(left - 1, l2)):
+                return [diff] + x
+            if -diff in l2 and 0 in l1 and (x := solve(left - 1, l1)):
+                return [- diff] + x
             return []
             
-        
-        target = sum(sums) // (2 ** (n - 1))
-        return solve(target, SortedList(sums), n)
+        return solve(n, SortedList(sums))
+                
         
