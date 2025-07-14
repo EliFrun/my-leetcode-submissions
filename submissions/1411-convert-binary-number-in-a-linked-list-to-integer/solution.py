@@ -12,4 +12,3 @@ class Solution:
             head = head.next
 
         return ret >> 1
-        
