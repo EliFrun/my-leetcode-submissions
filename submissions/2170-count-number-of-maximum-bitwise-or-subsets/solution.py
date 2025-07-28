@@ -1,21 +1,14 @@
 class Solution:
     def countMaxOrSubsets(self, nums: List[int]) -> int:
-        m = 0
-        for n in nums:
-            m |= n
+        best = 0
+        for num in nums:
+            best |= num
+       
+        @cache
+        def solve(incoming, i):
+            if i >= len(nums):
+                return 1 if incoming == best else 0
+            
+            return solve(incoming | nums[i], i + 1) + solve(incoming, i + 1)
 
-        ret = 0
-        for i in range(1, 2 ** len(nums) + 1):
-            lis = []
-            for j, n in enumerate(nums):
-                if (i >> j) & 1 == 1:
-                    lis.append(n)
-            curr = 0
-            for n in lis:
-                curr |= n
-            if curr == m:
-                ret += 1
-
-        return ret
-        
-        
+        return solve(0, 0)
