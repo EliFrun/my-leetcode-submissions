@@ -1,17 +1,17 @@
 class Solution:
     def totalFruit(self, fruits: List[int]) -> int:
-        i, j = 0, 0
-        max_len = 0
         d = defaultdict(int)
-        while j < len(fruits):
-            d[fruits[j]] += 1
+        left = 0
+        ret = 0
+        for fruit in fruits:
+            d[fruit] += 1
             while len(d) > 2:
-                d[fruits[i]] -= 1
-                if d[fruits[i]] == 0:
-                    d.pop(fruits[i])
-                i += 1
-                
-            max_len = max(max_len, j - i)
-            j += 1
+                d[fruits[left]] -= 1
+                if d[fruits[left]] == 0:
+                    d.pop(fruits[left])
+                left += 1
+            ret = max(ret, sum(d.values()))
+        return ret
+
+
         
-        return max_len + 1
