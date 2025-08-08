@@ -1,17 +1,17 @@
 class Solution:
     def soupServings(self, n: int) -> float:
-        if n > 4800:
-            return 1
+        if n > 5000:
+            return 1.0
         @cache
-        def solve(i, j):
-            if i <= 0 and j <= 0:
-                return 0.5
-            if i <= 0:
-                return 1
-            if j <= 0:
+        def solve(a, b):
+            if b <= 0 and a > 0:
                 return 0
-            
-            return 0.25 * solve(i - 100, j) + 0.25 * solve(i - 75, j - 25) + 0.25 * solve(i - 50, j - 50) + 0.25 * solve(i - 25, j - 75)
+            if b <= 0 and a <= 0:
+                return 0.5
+            if a <= 0:
+                return 1
 
-        return solve(n,n)
+            return (solve(a - 100, b) + solve(a - 25, b - 75) + solve(a - 50, b - 50) + solve(a - 75, b - 25)) / 4
+
+        return solve(n, n)
         
