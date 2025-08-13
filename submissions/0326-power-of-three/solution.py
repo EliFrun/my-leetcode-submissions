@@ -1,7 +1,11 @@
 class Solution:
     def isPowerOfThree(self, n: int) -> bool:
-        if n == 0:
+        if n < 1:
             return False
-        if n == 1:
-            return True
-        return (n / 3).is_integer() and self.isPowerOfThree(n / 3)
+        while n > 1:
+            if n % 3:
+                return False
+            n //= 3
+        
+        return True
+        
