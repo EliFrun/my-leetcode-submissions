@@ -1,7 +1,22 @@
 class Solution:
     def longestSubarray(self, nums: List[int]) -> int:
-        x = ''.join([str(i) for i in nums]).split('0')
+        left = 0
+        ret = 0
+        count = 0
+        curr = 0
+        for i, num in enumerate(nums):
+            if num == 0:
+                count += 1
+            else:
+                curr += 1
+            while count > 1:
+                if nums[left] == 0:
+                    count -= 1
+                else:
+                    curr -= 1
+                left += 1
+            ret = max(ret, curr - (1 if count == 0 else 0))
 
-        return max([len(x[i - 1]) + len(x[i]) for i in range(1, len(x))] + [len(s) - 1 for s in x if '1' in s])
+        return ret
 
         
