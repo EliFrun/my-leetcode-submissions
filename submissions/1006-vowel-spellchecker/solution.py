@@ -1,37 +1,36 @@
 class Solution:
     def spellchecker(self, wordlist: List[str], queries: List[str]) -> List[str]:
-        vowels = 'aeiou'
-        wordlistMap = {}
-        for idx, word in enumerate(wordlist):
-            wordlistMap[word] = idx
-            
-        lowerWordlistMap = {}
-        for idx, word in enumerate(wordlist):
-            if word.lower() not in lowerWordlistMap:
-                lowerWordlistMap[word.lower()] = idx
-                
-        vowellessMap = {}
+        d1 = set(wordlist)
         
-        for idx, word in enumerate(wordlist):
-            a = ''.join([x if x not in vowels else '*' for x in word.lower()])
-            if a not in vowellessMap:
-                vowellessMap[a] = idx
-                
-                
-        ret = [''] * len(queries)
-        for i, query in enumerate(queries):
-            if query in wordlistMap:
-                ret[i] = wordlist[wordlistMap[query]]
+        d2 = {}
+        for word in wordlist:
+            if word.lower() in d2:
                 continue
-                
-            if query.lower() in lowerWordlistMap:
-                ret[i] = wordlist[lowerWordlistMap[query.lower()]]
+            d2[word.lower()] = word
+
+        d3 = {}
+        for word in wordlist:
+            word2 = word.lower().replace('a', '*').replace('e', '*').replace('i', '*').replace('o', '*').replace('u', '*')
+            if word2 in d3:
                 continue
-             
-            vowellessWord = ''.join([x if x not in vowels else '*' for x in query.lower()])
-            if vowellessWord in vowellessMap:
-                ret[i] = wordlist[vowellessMap[vowellessWord]]
-                
+            d3[word2] = word
+
+        ret = []
+        for word in queries:
+            if word in d1:
+                ret.append(word)
+                continue
+
+            if word.lower() in d2:
+                ret.append(d2[word.lower()])
+                continue
+
+            word2 = word.lower().replace('a', '*').replace('e', '*').replace('i', '*').replace('o', '*').replace('u', '*')
+            if word2 in d3:
+                ret.append(d3[word2])
+                continue     
+
+            ret.append('')
         return ret
             
                 
