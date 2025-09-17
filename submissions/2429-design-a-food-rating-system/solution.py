@@ -1,22 +1,30 @@
 class FoodRatings:
 
     def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
-        self.d = defaultdict(SortedList)
-        self.f = {}
-        for food, cuisine, rating in zip(foods, cuisines, ratings):
-           self.d[cuisine].add([-rating, food])
-           self.f[food] = [cuisine, -rating]
+        self.foods = {
+            food: cuisine for food, cuisine in zip(foods, cuisines)
+        }
 
+        self.ratings = {
+            food: rating for food,rating in zip(foods, ratings)
+        }
+
+        self.cuisines = defaultdict(SortedList)
+        for cuisine, rating, food in zip(cuisines,ratings, foods):
+            self.cuisines[cuisine].add((rating, food))
         
 
     def changeRating(self, food: str, newRating: int) -> None:
-        self.d[self.f[food][0]].remove([self.f[food][1], food])
-        self.d[self.f[food][0]].add([-newRating, food])
-        self.f[food][1] = -newRating
-        
+        cuisine = self.foods[food]
+        rating = self.ratings[food]
+        self.cuisines[cuisine].remove((rating, food))
+        self.cuisines[cuisine].add((newRating, food))
+        self.ratings[food] = newRating
 
     def highestRated(self, cuisine: str) -> str:
-        return self.d[cuisine][0][1]
+        rating = self.cuisines[cuisine][-1][0]
+        idx = self.cuisines[cuisine].bisect_left((rating, ''))
+        return self.cuisines[cuisine][idx][1]
         
 
 
