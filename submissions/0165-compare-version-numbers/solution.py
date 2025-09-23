@@ -1,17 +1,17 @@
 class Solution:
-    def compareVersion(self, version1: str, version2: str) -> int:
-        v1 = version1.split('.')
-        v2 = version2.split('.')
-        
-        for x, y in zip(v1, v2):
-            if int(x) == int(y):
-                continue
-            else:
-                return -1 if int(x) < int(y) else 1
-        
-        if len(v1) < len(v2):
-            return 0 if all([int(x) == 0 for x in v2[len(v1):]]) else -1
-        elif len(v1) > len(v2):
-            return 0 if all([int(x) == 0 for x in v1[len(v2):]]) else 1
-        
+    def compareVersion(self, v1: str, v2: str) -> int:
+        v1 = v1.split('.')
+        v2 = v2.split('.')
+        for i in range(max(len(v1), len(v2))):
+            x = int(v1[i]) if len(v1) > i else 0
+            y = int(v2[i]) if len(v2) > i else 0
+
+            if x > y:
+                return 1
+            if y > x:
+                return -1
+
+
+
         return 0
+        
