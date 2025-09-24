@@ -1,32 +1,32 @@
 class Solution:
     def fractionToDecimal(self, n: int, d: int) -> str:
-        neg = False
-        if n < 0:
-            neg = not neg
-            n *= -1
-        if d < 0:
-            neg = not neg
-            d *= -1
-       
-        whole = n // d
-        rem = (n % d) * 10
-        ret = ('-' if neg else '') + str(whole)
-        if rem == 0:
-            if whole == 0:
-                return '0'
-            return ret
+        negative = n * d < 0 and n != 0
+        n, d = abs(n), abs(d)
+        
+        ret = str(n // d)
+        n %= d
+        if n == 0:
+            return ('-' if negative else '') + ret
+
         ret += '.'
+       
         i = len(ret)
         seen = {}
-        while rem > 0:
-            if rem in seen:
-                return ret[:seen[rem]] + '(' + ret[seen[rem]:] + ')'
-            seen[rem] = i
-            ret += str(rem // d)
-            rem = (rem % d) * 10
+        while n > 0:
+            if n in seen:
+                ret += ')'
+                ret = ret[:seen[n]] + '(' + ret[seen[n]:]
+                break
+            seen[n] = i
+            
+            if n // d == 0:
+                n *= 10
+            
+            ret += str(n//d)
+            n = n % d
             i += 1
-
-        return ret
+        
+        return ('-' if negative else '') + ret
 
         
         
