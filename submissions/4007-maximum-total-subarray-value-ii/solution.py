@@ -38,8 +38,13 @@ class Solution:
         s = SegTree(nums, 0, len(nums) - 1)
         q = []
         ret = 0
+        l = float('inf')
+        h = 0
         for i in range(len(nums)):
-            l, h = s.min_max_in_range(0, i)
+            if nums[i] < l:
+                l = nums[i]
+            if nums[i] > h:
+                h = nums[i]
             heappush(q, (l - h, (0, i)))
 
         for _ in range(k):
