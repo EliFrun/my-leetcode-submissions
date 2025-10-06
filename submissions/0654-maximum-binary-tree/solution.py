@@ -5,11 +5,15 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def constructMaximumBinaryTree(self, nums: List[int]) -> TreeNode:
-        if len(nums) == 0:
-            return None
-        
-        m = max(nums)
-        i = nums.index(m)
-        return TreeNode(m, self.constructMaximumBinaryTree(nums[0:i]), self.constructMaximumBinaryTree(nums[i + 1:]))
+    def constructMaximumBinaryTree(self, nums: List[int]) -> Optional[TreeNode]:
+        def solve(lis):
+            if not lis:
+                return None
+            return TreeNode(
+                max(lis),
+                solve(lis[:lis.index(max(lis))]),
+                solve(lis[lis.index(max(lis)) + 1:])
+            )
+
+        return solve(nums)
         
