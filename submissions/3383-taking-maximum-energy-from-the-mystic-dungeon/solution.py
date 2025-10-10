@@ -1,9 +1,12 @@
 class Solution:
     def maximumEnergy(self, energy: List[int], k: int) -> int:
-        n = len(energy)
-        memo = [0] * (n + k)
-        for i in range(n - 1, -1, - 1):
-            memo[i] = memo[i + k] +energy[i]
-        return max(memo[:n])
+        ret = float('-inf')
+        for i in range(k):
+            curr = 0
+            for j in reversed(list(range(i, len(energy), k))):
+                curr += energy[j]
+                ret = max(ret, curr)
+        return ret
                 
-        
+
+            
