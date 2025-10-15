@@ -1,29 +1,14 @@
 class Solution:
     def maxIncreasingSubarrays(self, nums: List[int]) -> int:
-        lists = []
-        curr = []
-        for num in nums:
-            if curr == []:
-                curr = [num]
-            elif curr[-1] >= num:
-                lists.append(curr)
-                curr = [num]
+        ret = 0
+        prev = 0
+        curr = 1
+        for i in range(1, len(nums)):
+            if nums[i] > nums[i - 1]:
+                curr += 1
             else:
-                curr.append(num)
-        lists.append(curr)   
-
-        print(lists) 
-
-        longest = len(lists[0]) // 2
-        for i in range(len(lists) - 1):
-            longest = max(
-                longest,
-                len(lists[i]) // 2,
-                len(lists[i + 1]) // 2,
-                min(
-                    len(lists[i]),
-                    len(lists[i + 1])
-                )
-            )
-
-        return longest
+                ret = max(ret, min(curr, prev), curr // 2)
+                prev = curr
+                curr = 1
+        
+        return max(ret, min(curr, prev), curr // 2)
