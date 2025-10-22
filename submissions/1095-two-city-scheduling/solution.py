@@ -1,16 +1,13 @@
 class Solution:
     def twoCitySchedCost(self, costs: List[List[int]]) -> int:
         @cache
-        def solve(i, a, b):
+        def solve(a, b, i):
             if i >= len(costs):
                 return 0
-            ret = float('inf')
-            if a > 0:
-                ret = min(ret, costs[i][0] + solve(i + 1, a - 1, b))
-        
-            if b > 0:
-                ret = min(ret, costs[i][1] + solve(i + 1, a, b - 1))
-
-            return ret
-
-        return solve(0, len(costs)//2, len(costs)//2)
+            
+            if a == 0:
+                return costs[i][1] + solve(a, b - 1, i + 1)
+            if b == 0:
+                return costs[i][0] + solve(a - 1, b, i + 1)
+            return min(costs[i][0] + solve(a - 1, b, i + 1), costs[i][1] + solve(a, b - 1, i + 1))  
+        return solve(len(costs)//2, len(costs)//2, 0)      
