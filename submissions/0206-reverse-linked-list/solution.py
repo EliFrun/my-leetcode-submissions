@@ -4,17 +4,21 @@
 #         self.val = val
 #         self.next = next
 class Solution:
-    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        def solve(prev, node):
-            if not node:
-                return
-            ret = None
-            if node.next == None:
-                ret = node
-            elif node.next != None:
-                ret = solve(node, node.next)
-            node.next = prev
-            return ret
+    def reverseList(self, h: Optional[ListNode]) -> Optional[ListNode]:
 
-        return solve(None, head)
+        ret = None
+        def solve(curr):
+            nonlocal ret
+            if not curr:
+                return None
+            if curr.next is None:
+                ret = ListNode(curr.val)
+                return ret
+            
+            tail = solve(curr.next)
+            tail.next = curr
+            curr.next = None
+            return curr
+        solve(h)
+        return ret
         
