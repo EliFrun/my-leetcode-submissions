@@ -1,28 +1,21 @@
 class Solution:
     def goodTriplets(self, nums1: List[int], nums2: List[int]) -> int:
-        lis = [0] * len(nums1)
-        for i, num in enumerate(nums1):
-            lis[num] = i
+        #[1,2,0,3]
+        indexes = {}
+        for i,v in enumerate(nums1):
+            indexes[v] = i
 
         for i in range(len(nums2)):
-            nums2[i] = lis[nums2[i]]
+            nums2[i] = indexes[nums2[i]]
 
-        s = SortedList([])
-
-        l = []
-        for v in nums2:
-            idx = s.bisect_right(v)
-            l.append(idx)
-            s.add(v)
-
-
-        s = SortedList([])
-        for i,v in enumerate(list(reversed(nums2))):
-            idx = s.bisect_right(-v)
-            l[-i - 1] *= idx
-            s.add(-v)
-
-        return sum(l)
-
+        left = SortedList()
+        right = SortedList(nums2)
+        ret = 0
+        for num in nums2:
+            ret += left.bisect_left(num) * (len(right) - right.bisect_left(num) - 1)
+            left.add(num)
+            right.remove(num)
+        return ret
         
 
+        
