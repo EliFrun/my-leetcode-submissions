@@ -1,15 +1,13 @@
 class Solution:
     def maxOperations(self, s: str) -> int:
-        while '00' in s:
-            s = s.replace('00', '0')
-        
-        count = 0
+        ones = 0
         ret = 0
-        for c in s:
-            print(c)
-            if c == '1':
-                count += 1
+        for i in range(len(s)):
+            if i + 1 < len(s) and s[i] == '0' and s[i + 1] == '0':
+                continue
+            if s[i] == '1':
+                ones += 1
             else:
-                ret += count
-
+                ret += ones
         return ret
+        
