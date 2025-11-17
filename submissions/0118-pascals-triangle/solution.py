@@ -1,14 +1,12 @@
 class Solution:
-    def generate(self, r: int) -> List[List[int]]:
+    def generate(self, numRows: int) -> List[List[int]]:
         ret = [[1]]
-        curr = [1] * min(r, 2)
-        for _ in range(r - 1):
-            ret.append(curr)
-            nxt = [1]
-            for i in range(len(curr) - 1):
-                nxt.append(curr[i] + curr[i + 1])
-            nxt.append(1)
-            curr = nxt
 
+        for i in range(1, numRows):
+            prev = ret[-1]
+            lis = [1]
+            for j in range(len(prev)):
+                lis.append(prev[j] + (prev[j + 1] if j + 1 < len(prev) else 0))
+            ret.append(lis)
         return ret
         
