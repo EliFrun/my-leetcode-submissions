@@ -1,16 +1,14 @@
 class Solution:
     def smallestRepunitDivByK(self, k: int) -> int:
-        if k % 2 == 0:
+        if k % 2 == 0 or k % 5 == 0:
             return -1
-        if k % 5 == 0:
-             return -1
-        
-        n = 1
-        ret = 1
-        while ret <= k and n % k != 0:
-            n = 1 + (10 * n) % k
+
+        ret = 0
+        v = 0
+        while ret < k:
             ret += 1
-            
-        return -1 if ret > k else ret
-        
+            v = 10 *v + 1
+            if v % k == 0:
+                return ret
+        return -1
         
