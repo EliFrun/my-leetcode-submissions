@@ -1,29 +1,33 @@
 class LRUCache:
 
     def __init__(self, capacity: int):
-        self.d = {}
-        self.usage_list = []
-        self.capacity = capacity
+        self.c = capacity
+        self.t = 0
+        self.times = {}
+        self.q = []
+        self.cache = {}
+        
 
     def get(self, key: int) -> int:
-        if key in self.d:
-            self.usage_list.remove(key)
-            self.usage_list.append(key)
-            return self.d[key]
-        else:
+        if key not in self.cache:
             return -1
+        self.times[key] = self.t
+        heappush(self.q, (self.t, key))
+        self.t += 1
+        return self.cache[key]
+        
 
     def put(self, key: int, value: int) -> None:
-        if len(self.usage_list) == self.capacity:
-            if key not in self.d:
-                self.d.pop(self.usage_list[0])
-                self.usage_list = self.usage_list[1:]
-          
-        if key in self.d:
-            self.usage_list.remove(key)
+        if len(self.cache) >= self.c and key not in self.cache:
+            while self.q[0][0] != self.times[self.q[0][1]]:
+                heappop(self.q)
+            t, k = heappop(self.q)
+            self.cache.pop(k)
         
-        self.d[key] = value
-        self.usage_list.append(key)
+        self.times[key] = self.t
+        heappush(self.q, (self.t, key))
+        self.t += 1
+        self.cache[key] = value
 
 
 # Your LRUCache object will be instantiated and called as such:
