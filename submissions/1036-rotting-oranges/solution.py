@@ -1,31 +1,32 @@
 class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
-        curr = set()
-        good = set()
+        rotten = set()
         for i in range(len(grid)):
-            for j in range(len(grid[0])):
-                if grid[i][j] == 1:
-                    good.add((i,j))
+            for j in range(len(grid[i])):
                 if grid[i][j] == 2:
-                    curr.add((i,j))
+                    rotten.add((i,j))
+        
 
-        ret = 0
-        while curr:
+        dirs = [0,1,0,-1,0]
+        t = -1
+        if not rotten:
+            t += 1
+        while rotten:
+            t += 1
             nxt = set()
-            for i,j in curr:
-                dirs = [0,1,0,-1,0]
+            for i,j in rotten:
                 for k in range(4):
                     di, dj = dirs[k], dirs[k + 1]
-                    if i + di < 0 or j + dj < 0 or i + di >= len(grid) or j + dj >= len(grid[0]):
+                    if not 0 <= i + di < len(grid):
                         continue
-                    if grid[i + di][j + dj] == 1:
-                        good.remove((i + di, j + dj))
-                        grid[i + di][j + dj] = 2
-                        nxt.add((i + di, j + dj))
-
-            ret += 1 if nxt else 0
-            curr = nxt
-
-        return ret if len(good) == 0 else -1
-
+                    if not 0 <= j + dj < len(grid[0]):
+                        continue
+                    if grid[i + di][j + dj] != 1:
+                        continue
+                    grid[i + di][j + dj] = 2
+                    nxt.add((i + di, j + dj))
+            rotten = nxt
+        if all(all(x != 1 for x in grid[i]) for i in range(len(grid))):
+            return t
+        return -1
         
