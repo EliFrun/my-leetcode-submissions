@@ -1,16 +1,17 @@
 class Solution:
     def findChampion(self, n: int, edges: List[List[int]]) -> int:
-        g = defaultdict(set)
-        for b, w in edges:
-            g[w].add(b)
-        
-        count = 0
-        best = -1
-        for i in range(n):
-            if len(g[i]) == 0:
-                best = i
-                count += 1
-            if count > 1:
-                return -1
+        g = defaultdict(int)
+        for p, c in edges:
+            g[c] += 1
 
-        return best
+        ret = -1
+        cnt = 0
+        for i in range(n):
+            if g[i] == 0:
+                ret = i
+                cnt += 1
+            if cnt > 1:
+                return -1
+        return ret
+
+        
