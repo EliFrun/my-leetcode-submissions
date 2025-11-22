@@ -1,4 +1,4 @@
 class Solution:
     def minimumOperations(self, nums: List[int]) -> int:
-        return sum([1 for num in nums if num % 3 != 0])
+        return len([x for x in nums if x % 3])
         
