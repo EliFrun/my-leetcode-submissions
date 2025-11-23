@@ -1,37 +1,39 @@
 class Solution:
     def maxSumDivThree(self, nums: List[int]) -> int:
-        ret = sum(nums)
-        nums.sort(reverse=True)
-        if ret % 3 == 0:
+        s = sum(nums)
+        h1 = []
+        h2 = []
+        for num in nums:
+            if num % 3 == 2:
+                heappush(h2, -num)
+                if len(h2) > 2:
+                    heappop(h2)
+            elif num % 3 == 1:
+                heappush(h1, -num)
+                if len(h1) > 2:
+                    heappop(h1)
+
+        h1 = [-x for x in h1]
+        h2 = [-x for x in h2]
+        
+        if s % 3 == 1:
+            ret = 0
+            if h1:
+                ret = s - min(h1)
+            if len(h2) > 1:
+                ret = max(ret, s - sum(h2))
             return ret
-        
-        mod0 = [x for x in nums if x % 3 == 0]
-        mod1 = [x for x in nums if x % 3 == 1]
-        mod2 = [x for x in nums if x % 3 == 2]
-        
-        mod1.sort()
-        mod2.sort()
-        
-        if ret % 3 == 1:
-            if len(mod1) != 0 and len(mod2) >= 2:
-                return ret - min(mod1[0], mod2[0] + mod2[1]) 
-            elif len(mod1) != 0:
-                return ret - mod1[0]
-            elif len(mod2) >= 2:
-                return ret - mod2[0] -mod2[1]
-            else:
-                return 0
-            
-        if ret % 3 == 2:
-            if len(mod2) != 0 and len(mod1) >= 2:
-                return ret - min(mod2[0], mod1[0] + mod1[1])
-            elif len(mod2) != 0:
-                return ret - mod2[0]
-            elif len(mod1) >= 2:
-                return ret - mod1[0] -mod1[1]
-            else:
-                return 0
-            
+        if s % 3 == 2:
+            ret = 0
+            if len(h1) > 1:
+                ret = max(ret, s - sum(h1))
+            if h2:
+                ret = max(ret, s - min(h2))
+            return ret
+        return s
+         
+
+
             
         
         
