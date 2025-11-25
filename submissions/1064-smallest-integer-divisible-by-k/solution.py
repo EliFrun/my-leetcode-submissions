@@ -7,7 +7,7 @@ class Solution:
         v = 0
         while ret < k:
             ret += 1
-            v = 10 *v + 1
+            v = (10 * v + 1) % k
             if v % k == 0:
                 return ret
         return -1
