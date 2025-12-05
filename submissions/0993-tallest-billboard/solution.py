@@ -1,18 +1,13 @@
 class Solution:
     def tallestBillboard(self, rods: List[int]) -> int:
-        @cache
-        def solve(diff, i):
-            if diff < 0:
-                return -float('inf')
-            if diff == 0:
-                return 0
-            if i >= len(rods):
-                return -float('inf')
-            return max(
-                solve(diff, i + 1),
-                rods[i] + solve(max(-1, diff - 2 * rods[i]), i + 1),
-                solve(max(-1, diff - rods[i]), i + 1)
-            )
-
-        return solve(sum(rods), 0)
+        s = sum(rods)
+        dp = [0] * (sum(rods) + 1)
+        dp[s] = s
+        for rod in rods:
+            for i in range(len(dp) - rod):
+                if i + 2 * rod < len(dp):
+                    dp[i] = max(dp[i + 2 * rod] - rod, dp[i])
+                dp[i] = max(dp[i + rod] - rod, dp[i])
+        return dp[0]
+            
         
