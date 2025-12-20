@@ -1,23 +1,37 @@
 class RandomizedSet:
 
     def __init__(self):
-        self.s = set()
+        self.l = []
+        self.value_valid = {}
         
 
     def insert(self, val: int) -> bool:
-        if val in self.s:
-            return False
-        self.s.add(val)
+        if val in self.value_valid:
+            if self.value_valid[val][0] == True:
+                return False
+            self.value_valid[val][0] = True
+        else:
+            self.l.append(val)
+            self.value_valid[val] = [True, len(self.l) - 1]
         return True
+
 
     def remove(self, val: int) -> bool:
-        if val not in self.s:
+        if val not in self.value_valid:
             return False
-        self.s.remove(val)
+        elif not self.value_valid[val][0]:
+            return False
+        self.value_valid[val][0] = False
         return True
+        
 
     def getRandom(self) -> int:
-        return random.choice(list(self.s))
+        v = random.choice(self.l)
+        while self.value_valid[v][0] == False:
+            v = random.choice(self.l)
+        return v
+
+
         
 
 
