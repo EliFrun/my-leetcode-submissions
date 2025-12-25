@@ -1,13 +1,9 @@
 class Solution:
     def maximumHappinessSum(self, happiness: List[int], k: int) -> int:
-        return sum(
-            [
-                max(0, v - i) for i,v in 
-                enumerate(
-                    reversed(
-                        sorted(happiness)[len(happiness) - k:]
-                    )
-                )
-            ]
-        )
+        happiness.sort(reverse=True)
+
+        ret = 0
+        for i in range(k):
+            ret += max(0, happiness[i] - i)
+        return ret
         
