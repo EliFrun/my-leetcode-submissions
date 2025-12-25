@@ -1,26 +1,29 @@
 class Solution:
-    @functools.cache
     def isMatch(self, s: str, p: str) -> bool:
-        if len(s) == 0:
-            if len(p) > 1 and p[1] == '*':
-                return self.isMatch(s, p[2:])
-            return len(p) == 0
-        
-        if len(p) == 0:
-            return len(s) == 0
 
-        if len(p) > 1 and p[1] == '*':
-            if p[0] == '.':
-                return self.isMatch(s[1:], p) or self.isMatch(s, p[2:])
-            else:
-                if s[0] == p[0]:
-                    return self.isMatch(s, p[2:]) or self.isMatch(s[1:], p)
-                else:
-                    return self.isMatch(s, p[2:])
-        elif p[0] == '.':
-            return self.isMatch(s[1:], p[1:])
-        else:
-            return (self.isMatch(s[1:], p[1:]) if s[0] == p[0] else False)
+        @cache
+        def solve(i, j):
+            if i == len(s):
+                if len(p) - j > 1 and p[j + 1] == '*':
+                    return solve(i, j + 2)
+                return j == len(p) 
 
-        
-        
+            if j == len(p):
+                return i == len(s)
+            
+            
+            if len(p) - j > 1 and p[j + 1] == '*':
+                ret = solve(i, j + 2)
+                if ret:
+                    return True
+                if s[i] == p[j] or p[j] == '.':
+                    return solve(i + 1, j) or solve(i, j + 2) or solve(i + 1, j + 2)
+            
+            if p[j] == '.':
+                return solve(i + 1, j + 1)
+            
+            if s[i] != p[j]:
+                return False
+            return solve(i + 1, j + 1)
+
+        return solve(0, 0)
