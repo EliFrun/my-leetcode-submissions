@@ -3,12 +3,17 @@ class Solution:
         dictionary.sort(key=lambda x: (-len(x), x))
 
         for word in dictionary:
-            length = 0
-            i = 0
-            while length < len(word) and i < len(s) and len(word) - length <= len(s) - i:
-                if word[length] == s[i]:
-                    length += 1
-                i += 1
-            if length == len(word):
-                return word
+            j = 0
+            for i, c in enumerate(s):
+                if c == word[j]:
+                    j += 1
+                if len(s) - i < len(word) - j:
+                    break
+
+                if j >= len(word):
+                    return word
         return ''
+
+
+
+        
