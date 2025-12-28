@@ -1,4 +1,4 @@
 class Solution:
     def countNegatives(self, grid: List[List[int]]) -> int:
-        return reduce(lambda x, y: x + len([i for i in y if i < 0]), grid, 0)
+        return sum([sum([1 if x < 0 else 0 for x in row]) for row in grid])
         
