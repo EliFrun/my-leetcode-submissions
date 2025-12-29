@@ -1,27 +1,31 @@
 class Solution:
     def colorTheGrid(self, m: int, n: int) -> int:
-        @cache
-        def options(prev):
-            ret = [[]]
-            for i in range(m):
-                nxt = []
-                for l in ret:
-                    for j in range(3):
-                        if prev[i] == j:
-                            continue
-                        if l and l[-1] == j:
-                            continue
-                        nxt.append(l + [j])
-                ret = nxt
-            return ret
+        l = set(['0', '1', '2'])
+        for _ in range(m - 1):
+            nxt = set()
+            for seq in l:
+                for i in range(3):
+                    if str(i) != seq[-1]:
+                        nxt.add(seq + str(i))
+            l = nxt
+        
+        l = sorted(list(l))
+        transition_function = defaultdict(set)
+        for i, seq in enumerate(l):
+            for j, seq2 in enumerate(l):
+                if all(s1 != s2 for s1,s2 in zip(seq, seq2)):
+                    transition_function[i].add(j)
 
-        @cache
-        def solve(n_left, prev_column):
-            if n_left == 0:
-                return 1
-            return sum(solve(n_left - 1, tuple(option)) for option in options(prev_column))
+        dp = [[0] * len(l) for _ in range(n)]
+        dp[0] = [1] * len(l)
+        for i in range(1, n):
+            for j in range(len(dp[0])):
+                for k in transition_function[j]:
+                    dp[i][j] = (dp[i][j] + dp[i - 1][k]) % 1_000_000_007
 
-        return solve(n, tuple([-1] * m)) % 1_000_000_007
+        return sum(dp[-1]) % 1_000_000_007
 
+
+       
             
         
