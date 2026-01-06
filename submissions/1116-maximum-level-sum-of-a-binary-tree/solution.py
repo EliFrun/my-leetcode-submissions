@@ -8,23 +8,21 @@ class Solution:
     def maxLevelSum(self, root: Optional[TreeNode]) -> int:
         curr = [root]
         layer = 1
-        m = float('-inf')
-        ret = 0
-        while curr:
-            v = sum([x.val for x in curr]) 
-            if v > m:
-                m = v
-                ret = layer  
-            
+        ret = 1
+        best = root.val
+        while curr and any(curr):
             nxt = []
-            for node in curr:
-                if node.left:
-                    nxt.append(node.left)
-                if node.right:
-                    nxt.append(node.right)
-            
-            curr = nxt
-            layer += 1
+            s = sum([x.val for x in curr if x])
+            if s > best:
+                ret = layer
+                best = s
 
+            for n in curr:
+                if not n:
+                    continue
+                nxt.append(n.left)
+                nxt.append(n.right)
+            layer += 1
+            curr = nxt
         return ret
-        
+            
