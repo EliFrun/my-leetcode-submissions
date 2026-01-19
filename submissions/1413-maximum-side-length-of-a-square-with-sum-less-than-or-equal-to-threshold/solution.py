@@ -1,30 +1,26 @@
 class Solution:
     def maxSideLength(self, mat: List[List[int]], threshold: int) -> int:
-        prefix = [[0] for _ in range(len(mat))]
+        prefix = [[0 for _ in range(len(mat[0]) + 1)] for _ in range(len(mat) + 1)]
         ret = 0
-        for i, row in enumerate(mat):
-            for v in row:
-                prefix[i].append(prefix[i][-1] + v)
+        for i in range(1, len(mat) + 1):
+            for j in range(1, len(mat[0]) + 1):
+                prefix[i][j] = mat[i - 1][j - 1] + prefix[i - 1][j] + prefix[i][j - 1] - prefix[i - 1][j - 1]
 
-        def solve(i, j, k):
-            square_sum = 0
-            for l in range(k + 1):
-                square_sum += prefix[i + l][j + k + 1] - prefix[i + l][j]
-            return square_sum
-    
-        for i in range(len(mat)):
-            for j in range(len(mat[0])):
-                bottom, top = 0, min(len(mat[0]) - j, len(mat) - i) - 1
-                while top - bottom > 1:
-                    k = (bottom + top) // 2
-
-                    if solve(i,j,k) <= threshold:
-                        bottom = k
-                    else:
-                        top = k
-                if solve(i,j,top) <= threshold:
-                    ret = max(ret, top + 1)
-                elif solve(i,j,bottom) <= threshold:
-                    ret = max(ret, bottom + 1)
-        return ret
+        start = [(0, x) for x in range(len(mat[0]))] + [(x, 0) for x in range(1, len(mat))]
+        ret = 0
+        for i, j in start:
+            left = 0
+            k = ret
+            s = 0
+            while i + k < len(prefix) and j + k < len(prefix[0]):
+                s = prefix[i + k][j + k] - prefix[i + left][j + k] - prefix[i + k][j + left] + prefix[i + left][j + left]
+                while s > threshold:
+                    left += 1
+                    s = prefix[i + k][j + k] - prefix[i + left][j + k] - prefix[i + k][j + left] + prefix[i + left][j + left]
+                if k - left > ret:
+                    ret = k - left
+                k += 1
+        return max(0, ret)
+                
+        
         
