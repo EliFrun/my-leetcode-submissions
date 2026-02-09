@@ -6,20 +6,26 @@
 #         self.right = right
 class Solution:
     def balanceBST(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        def inorder(node):
-            if not node:
-                return []
-            return inorder(node.left) + [node.val] + inorder(node.right)
+        in_order = []
+        def traverse(curr):
+            if not curr:
+                return
+            traverse(curr.left)
+            in_order.append(curr)
+            traverse(curr.right)
 
-        lis = inorder(root)
-        def rebuild(vals):
-            if not vals:
+
+        def rebuild(l, r):
+            if r < l:
                 return None
-            ret = TreeNode(vals[len(vals)//2])
-            ret.left = rebuild(vals[:len(vals)//2])
-            ret.right = rebuild(vals[len(vals)//2 + 1:])
+            ret = TreeNode(in_order[(l + r)//2].val)
+            ret.left = rebuild(l, (l + r)//2 - 1)
+            ret.right = rebuild((l + r)//2 + 1, r)
             return ret
 
-        return rebuild(lis)
+        traverse(root)
+        return rebuild(0, len(in_order) - 1)
+            
 
+            
         
