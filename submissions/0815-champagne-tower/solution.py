@@ -1,16 +1,18 @@
 class Solution:
     def champagneTower(self, poured: int, query_row: int, query_glass: int) -> float:
-        lis = [[0] * x for x in range(1, 101)]
-        lis[0][0] = poured
-        for i in range(99):
-            if all([x == 0 for x in lis[i]]):
-                break
-            for j in range(len(lis[i])):
-                to_lose = max(0, lis[i][j] - 1)
-                lis[i][j] -= to_lose
-                lis[i + 1][j] += to_lose / 2
-                lis[i + 1][j + 1] += to_lose / 2
+        row = 0
+        curr = [poured]
+        while row < query_row:
+            nxt = [0] * (len(curr) + 1)
+            for i in range(len(curr)):
+                curr[i] -= 1
+                if curr[i] <= 0:
+                    continue
+                nxt[i] += curr[i] / 2
+                nxt[i + 1] += curr[i] / 2
 
-        return min(1, lis[query_row][query_glass])
-        
+            curr = nxt
+            row += 1
+
+        return min(1, curr[query_glass])
         
